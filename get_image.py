@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 # 顔認識する対象を決定（検索ワードを入力）
 SearchName = ["双葉杏 ssr", "小日向美穂 ssr", "大槻唯 ssr", "渋谷凛 ssr"]
 # 画像の取得枚数の上限
-ImgNumber = 1000
+ImgNumber = 600
 # CNNで学習するときの画像のサイズを設定（サイズが大きいと学習に時間がかかる）
 ImgSize = (250, 250)
 input_shape = (250, 250, 3)
@@ -27,8 +27,7 @@ class Google:
         self.GOOGLE_SEARCH_URL = 'https://www.google.co.jp/search'
         self.session = requests.session()
         self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:57.0)'
-            ' Gecko/20100101 Firefox/57.0'})
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0'})
 
     def Search(self, keyword, type='text', maximum=1000):
         '''Google検索'''
@@ -95,14 +94,13 @@ if __name__ == "__main__":
         # 画像検索
         ImgURLs = google.Search(name, type='image', maximum=ImgNumber)
         # 保存先のディレクトリ作成
-        os.makedirs("images/Original/"+str(name), exist_ok=True)
+        os.makedirs("images/Original/" + str(name), exist_ok=True)
 
         # Originalファイルに画像を保存する
         for i, target in enumerate(ImgURLs):  # ImgURLsからtargetに入れる
             try:
                 re = requests.get(target, allow_redirects=False)
-                with open("images/Original/" + str(name) + '/' + str(i) +
-                          '.jpg', 'wb') as f:  # imgフォルダに格納
+                with open("images/Original/" + str(name) + '/' + str(i) + '.jpg', 'wb') as f:  # imgフォルダに格納
                     f.write(re.content)  # .contentにて画像データとして書き込む
             except requests.exceptions.ConnectionError:
                 continue

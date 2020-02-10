@@ -21,26 +21,25 @@ input_shape = (250, 250, 3)
 
 def main():
     for name in SearchName:
-        in_dir = "images/FaceEdited/"+name+"/*"
+        in_dir = "images/FaceEdited/" + name + "/*"
         in_jpg = glob.glob(in_dir)
-        img_file_name_list = os.listdir("images/FaceEdited/"+name+"/")
+        img_file_name_list = os.listdir("images/FaceEdited/" + name + "/")
         # img_file_name_listをシャッフル、そのうち2割をtest_imageディテクトリに入れる
         random.shuffle(in_jpg)
         os.makedirs('images/test/' + name, exist_ok=True)
-        for t in range(len(in_jpg)//5):
-            shutil.move(str(in_jpg[t]), "images/test/"+name)
+        for t in range(len(in_jpg) // 5):
+            shutil.move(str(in_jpg[t]), "images/test/" + name)
 
     # 教師データのラベル付け
     X_train = []
     Y_train = []
     for i in range(len(SearchName)):
-        img_file_name_list = os.listdir("images/FaceEdited/"+SearchName[i])
+        img_file_name_list = os.listdir("images/FaceEdited/" + SearchName[i])
         print("{}:トレーニング用の写真の数は{}枚です。".format(
             SearchName[i], len(img_file_name_list)))
 
-        for j in range(0, len(img_file_name_list)-1):
-            n = os.path.join("images/FaceEdited/" +
-                             SearchName[i]+"/", img_file_name_list[j])
+        for j in range(0, len(img_file_name_list) - 1):
+            n = os.path.join("images/FaceEdited/" + SearchName[i] + "/", img_file_name_list[j])
             img = cv2.imread(n)
             if img is None:
                 print('image' + str(j) + ':NoImage')
@@ -57,12 +56,12 @@ def main():
     X_test = []  # 画像データ読み込み
     Y_test = []  # ラベル（名前）
     for i in range(len(SearchName)):
-        img_file_name_list = os.listdir("images/test/"+SearchName[i])
+        img_file_name_list = os.listdir("images/test/" + SearchName[i])
         print("{}:テスト用の写真の数は{}枚です。".format(
             SearchName[i], len(img_file_name_list)))
-        for j in range(0, len(img_file_name_list)-1):
+        for j in range(0, len(img_file_name_list) - 1):
             n = os.path.join(
-                "images/test/"+SearchName[i]+"/", img_file_name_list[j])
+                "images/test/" + SearchName[i] + "/", img_file_name_list[j])
             img = cv2.imread(n)
             if img is None:
                 print('image' + str(j) + ':NoImage')

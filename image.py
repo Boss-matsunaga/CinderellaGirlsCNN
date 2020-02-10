@@ -20,10 +20,10 @@ def cut_face():
 
     for name in SearchName:
         # 画像データのあるディレクトリ
-        input_data_path = "images/Original/"+str(name)
+        input_data_path = "images/Original/" + str(name)
         # 切り抜いた画像の保存先ディレクトリを作成
-        os.makedirs("images/Face/"+str(name)+"_face", exist_ok=True)
-        save_path = "images/Face/"+str(name)+"_face/"
+        os.makedirs("images/Face/" + str(name) + "_face", exist_ok=True)
+        save_path = "images/Face/" + str(name) + "_face/"
         # 収集した画像の枚数(任意で変更)
         image_count = ImgNumber
         # 顔検知に成功した数(デフォルトで0を指定)
@@ -32,8 +32,7 @@ def cut_face():
         print("{}の顔を検出し切り取りを開始します。".format(name))
         # 集めた画像データから顔が検知されたら、切り取り、保存する。
         for i in range(image_count):
-            img = cv2.imread(input_data_path + '/' +
-                             str(i) + '.jpg', cv2.IMREAD_COLOR)
+            img = cv2.imread(input_data_path + '/' + str(i) + '.jpg', cv2.IMREAD_COLOR)
             if img is None:
                 print('image' + str(i) + ':NoFace')
             else:
@@ -46,8 +45,7 @@ def cut_face():
                         w = rect[2]
                         h = rect[3]
                         cv2.imwrite(
-                            save_path + 'cutted' + str(face_detect_count) +
-                            '.jpg', img[y:y+h,  x:x+w])
+                            save_path + 'cutted' + str(face_detect_count) + '.jpg', img[y:y + h, x:x + w])
                         face_detect_count = face_detect_count + 1
                 else:
                     print('image' + str(i) + ':NoFace')
@@ -58,8 +56,8 @@ def cut_face():
 def image_inflated():
     for name in SearchName:
         print("{}の写真を増やします。".format(name))
-        in_dir = "images/Face/"+name+"_face/*"
-        out_dir = "images/FaceEdited/"+name
+        in_dir = "images/Face/" + name + "_face/*"
+        out_dir = "images/FaceEdited/" + name
         os.makedirs(out_dir, exist_ok=True)
         in_jpg = glob.glob(in_dir)
         # img_file_name_list = os.listdir("images/Face/"+name+"_face/")
@@ -70,17 +68,17 @@ def image_inflated():
             for ang in [-10, 0, 10]:
                 img_rot = ndimage.rotate(img, ang)
                 img_rot = cv2.resize(img_rot, ImgSize)
-                fileName = os.path.join(out_dir, str(i)+"_"+str(ang)+".jpg")
+                fileName = os.path.join(out_dir, str(i) + "_" + str(ang) + ".jpg")
                 cv2.imwrite(str(fileName), img_rot)
                 # 閾値
                 img_thr = cv2.threshold(
                     img_rot, 100, 255, cv2.THRESH_TOZERO)[1]
-                fileName = os.path.join(out_dir, str(i)+"_"+str(ang)+"thr.jpg")
+                fileName = os.path.join(out_dir, str(i) + "_" + str(ang) + "thr.jpg")
                 cv2.imwrite(str(fileName), img_thr)
                 # ぼかし
                 img_filter = cv2.GaussianBlur(img_rot, (5, 5), 0)
                 fileName = os.path.join(
-                    out_dir, str(i)+"_"+str(ang)+"filter.jpg")
+                    out_dir, str(i) + "_" + str(ang) + "filter.jpg")
                 cv2.imwrite(str(fileName), img_filter)
     print("画像の水増しに大成功しました！")
 
